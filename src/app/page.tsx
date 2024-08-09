@@ -1,10 +1,11 @@
 'use client'
 import Image from "next/image";
-import styles from "./page.module.css";
+import Styles from './page.module.css';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import Script from 'next/script';
 
 type PantryItem = {
   id: number;
@@ -55,17 +56,17 @@ const PantryForm: React.FC<PantryFormProps> = ({ pantryItems, setPantryItems }) 
   };
 
   return (
-    <div className={styles.formContainer}>
+    <div className={Styles.formContainer}>
       <h2>Pantry Items</h2>
       <input
-        className={styles.input}
+        className={Styles.input}
         type="text"
         value={name}
         onChange={e => setName(e.target.value)}
         placeholder="Item Name"
       />
       <input
-        className={styles.input}
+        className={Styles.input}
         type="number"
         value={quantity}
         onChange={e => setQuantity(Number(e.target.value))}
@@ -73,16 +74,16 @@ const PantryForm: React.FC<PantryFormProps> = ({ pantryItems, setPantryItems }) 
         min="1"
       />
       {editingId ? (
-        <button className={styles.button} onClick={updateItem}>Update Item</button>
+        <button className={Styles.button} onClick={updateItem}>Update Item</button>
       ) : (
-        <button className={styles.button} onClick={addItem}>Add Item</button>
+        <button className={Styles.button} onClick={addItem}>Add Item</button>
       )}
-      <ul className={styles.list}>
+      <ul className={Styles.list}>
         {pantryItems.map(item => (
-          <li key={item.id} className={styles.listItem}>
+          <li key={item.id} className={Styles.listItem}>
             {item.name} - {item.quantity}
-            <button className={styles.editButton} onClick={() => startEditing(item.id)}>Edit</button>
-            <button className={styles.deleteButton} onClick={() => deleteItem(item.id)}>Delete</button>
+            <button className={Styles.editButton} onClick={() => startEditing(item.id)}>Edit</button>
+            <button className={Styles.deleteButton} onClick={() => deleteItem(item.id)}>Delete</button>
           </li>
         ))}
       </ul>
@@ -108,23 +109,24 @@ export default function Home() {
   }, [searchQuery, pantryItems]);
 
   return (
-    <div className={styles.container}>
+    <div className={Styles.container}>
+      <Script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js" />
       <Head>
         <title>Pantry Tracker</title>
         <meta name="description" content="Track your pantry items easily" />
         <link rel="icon" href="/favicon.ico" />
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
       </Head>
-      <header className={styles.header}>
-        <label className={styles.searchContainer}>Search
-          <input className={styles.input} 
+      <header className={Styles.header}>
+        <label className={Styles.
+          searchContainer}>Search
+          <input className={Styles.input} 
             type="text" 
             value={searchQuery} 
             onChange={handleSearchChange} 
             placeholder="Search items" />
         </label>
       </header>
-      <main className={styles.main}>
+      <main className={Styles.main}>
         <PantryForm pantryItems={filteredItems} setPantryItems={setPantryItems}/>
       </main>
     </div>

@@ -28,9 +28,14 @@
   },
   "include": [
     "src/**/*",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "declarations.d.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"
+    ,".next"
   ]
 }
