@@ -3,6 +3,8 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import Head from 'next/head';
 import React, { useState } from 'react';
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
 
 const PantryForm = () => {
   const [pantryItems, setPantryItems] = useState([]);
@@ -84,6 +86,7 @@ export default function Home() {
         <title>Pantry Tracker</title>
         <meta name="description" content="Track your pantry items easily" />
         <link rel="icon" href="/favicon.ico" />
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
       </Head>
       <main className={styles.main}>
         <PantryForm />
@@ -91,5 +94,6 @@ export default function Home() {
     </div>
   );
 }
+
 
 
