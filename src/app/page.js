@@ -1,97 +1,95 @@
-import * as React from 'react';
+'use client'
 import Image from "next/image";
 import styles from "./page.module.css";
+import Head from 'next/head';
+import React, { useState } from 'react';
 
-export default function Home() {
+const PantryForm = () => {
+  const [pantryItems, setPantryItems] = useState([]);
+  const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [editingId, setEditingId] = useState(null);
+
+  const addItem = () => {
+    const newItem = { id: Date.now(), name, quantity };
+    setPantryItems([...pantryItems, newItem]);
+    setName('');
+    setQuantity(1);
+  };
+
+  const deleteItem = (id) => {
+    setPantryItems(pantryItems.filter(item => item.id !== id));
+  };
+
+  const startEditing = (id) => {
+    const item = pantryItems.find(item => item.id === id);
+    if (item) {
+      setName(item.name);
+      setQuantity(item.quantity);
+      setEditingId(id);
+    }
+  };
+
+  const updateItem = () => {
+    setPantryItems(
+      pantryItems.map(item =>
+        item.id === editingId ? { ...item, name, quantity } : item
+      )
+    );
+    setName('');
+    setQuantity(1);
+    setEditingId(null);
+  };
 
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <div className={styles.formContainer}>
+      <h2>Pantry Items</h2>
+      <input
+        className={styles.input}
+        type="text"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        placeholder="Item Name"
+      />
+      <input
+        className={styles.input}
+        type="number"
+        value={quantity}
+        onChange={e => setQuantity(Number(e.target.value))}
+        placeholder="Quantity"
+        min="1"
+      />
+      {editingId ? (
+        <button className={styles.button} onClick={updateItem}>Update Item</button>
+      ) : (
+        <button className={styles.button} onClick={addItem}>Add Item</button>
+      )}
+      <ul className={styles.list}>
+        {pantryItems.map(item => (
+          <li key={item.id} className={styles.listItem}>
+            {item.name} - {item.quantity}
+            <button className={styles.editButton} onClick={() => startEditing(item.id)}>Edit</button>
+            <button className={styles.deleteButton} onClick={() => deleteItem(item.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+export default function Home() {
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Pantry Tracker</title>
+        <meta name="description" content="Track your pantry items easily" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className={styles.main}>
+        <PantryForm />
+      </main>
+    </div>
   );
 }
+
+
